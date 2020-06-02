@@ -17,6 +17,7 @@ jobs:
       is_admin: ${{ steps.info.outputs.is_admin }}
       title: ${{ steps.info.outputs.title }}
       body: ${{ steps.info.outputs.body }}
+      pr: ${{ steps.info.outputs.pr }}
     steps:
       - name: Get info
         id: info
@@ -39,6 +40,7 @@ jobs:
           else
             is_admin=false
           fi
+          pr_number=$(jq -r ".issue.number" "${GITHUB_EVENT_PATH}")
 
           echo "##[set-output name=base;]$(echo ${base})"
           echo "##[set-output name=ref;]$(echo ${ref})"
@@ -46,10 +48,11 @@ jobs:
           echo "##[set-output name=user;]$(echo ${commenter})"
           echo "##[set-output name=title;]$(echo ${title})"
           echo "##[set-output name=body;]$(echo ${body})"
+          echo "##[set-output name=pr;]$(echo ${pr})"
 
           author=$(jq -r ".issue.user.login" "${GITHUB_EVENT_PATH}")
           org=$(jq -r ".repository.owner.login" "${GITHUB_EVENT_PATH}")
-          pr_number=$(jq -r ".issue.number" "${GITHUB_EVENT_PATH}")
+          
         
           
       - name: echo output
@@ -85,7 +88,11 @@ jobs:
           remote_repo="https://idanilt:${{secrets.GITHUB_TOKEN}}@github.com/idanilt/lerna-publish-test.git"
           git push "${remote_repo}" HEAD:develop
       - name: merge
-        run: git fetch && git checkout master && git merge develop && git push
+        run: |
+          sha=$(git rev-parse HEAD) 
+          curl -u $project:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/idanilt/lerna-publish-test/pulls/${{ needs.details.outputs.pr }}/merge) \
+            --request POST 
+            --data '{ "sha": "$sha", "merge_method": "merge", "commit_message": "", "commit_title": "Release v${{ needs.details.outputs.title }}" }'
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
