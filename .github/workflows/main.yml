@@ -78,7 +78,7 @@ jobs:
         run: yarn
       - name: update version
         run: |
-          yarn lerna version ${{ steps.info.outputs.title }} --no-push --force-publish  --yes
+          yarn lerna version ${{ needs.details.outputs.title }} --no-push --force-publish  --yes
           git push -u origin master
       - name: merge
         run: git checkout master && git fetch && git merge develop && git push
