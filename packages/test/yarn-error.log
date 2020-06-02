@@ -1,0 +1,65 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn publish --new-version 0.0.8
+
+PATH: 
+  /home/idan/tmp/lerna-publish-test/packages/test/node_modules/.bin:/home/idan/tmp/lerna-publish-test/packages/node_modules/.bin:/home/idan/tmp/lerna-publish-test/node_modules/.bin:/home/idan/tmp/node_modules/.bin:/home/idan/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/local/bin:/home/idan/Downloads/protoc/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.17.3
+
+Node version: 
+  10.16.3
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:136724:13)
+      at Interface.emit (events.js:198:13)
+      at Interface._ttyWrite (readline.js:801:16)
+      at ReadStream.onkeypress (readline.js:184:10)
+      at ReadStream.emit (events.js:198:13)
+      at emitKeys (internal/readline.js:424:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1075:36)
+      at ReadStream.emit (events.js:198:13)
+      at addChunk (_stream_readable.js:288:12)
+
+npm manifest: 
+  {
+    "name": "test",
+    "version": "0.0.8",
+    "description": "> TODO: description",
+    "author": "idanilt <idan@ilt.co.il>",
+    "homepage": "https://github.com/idanilt/lerna-publish-test#readme",
+    "license": "MIT",
+    "main": "lib/test.js",
+    "directories": {
+      "lib": "lib",
+      "test": "__tests__"
+    },
+    "files": [
+      "lib"
+    ],
+    "publishConfig": {
+      "registry": "https://registry.yarnpkg.com"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/idanilt/lerna-publish-test.git"
+    },
+    "scripts": {
+      "test": "echo \"Error: run tests from root\" && exit 1"
+    },
+    "bugs": {
+      "url": "https://github.com/idanilt/lerna-publish-test/issues"
+    },
+    "gitHead": "032018e37562dbcb5391140ec9b03bd31303d933"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
