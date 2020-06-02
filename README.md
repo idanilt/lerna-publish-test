@@ -1,3 +1,3 @@
 # lerna-publish-test
 
-hey
+develop
