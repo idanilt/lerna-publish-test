@@ -83,7 +83,7 @@ jobs:
           yarn lerna version ${{ needs.details.outputs.title }} --no-push --force-publish  --yes
           #git push -u origin master
           remote_repo="https://idanilt:${{secrets.GITHUB_TOKEN}}@github.com/idanilt/lerna-publish-test.git"
-          git push "${remote_repo}" HEAD:master
+          git push "${remote_repo}" HEAD:develop
       - name: merge
         run: git checkout master && git fetch && git merge develop && git push
       - name: Create Release
