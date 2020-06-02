@@ -48,7 +48,7 @@ jobs:
           echo "##[set-output name=user;]$(echo ${commenter})"
           echo "##[set-output name=title;]$(echo ${title})"
           echo "##[set-output name=body;]$(echo ${body})"
-          echo "##[set-output name=pr;]$(echo ${pr})"
+          echo "##[set-output name=pr;]$(echo ${pr_number})"
 
           author=$(jq -r ".issue.user.login" "${GITHUB_EVENT_PATH}")
           org=$(jq -r ".repository.owner.login" "${GITHUB_EVENT_PATH}")
@@ -108,3 +108,12 @@ jobs:
         run: |
           git fetch
           yarn lerna publish from-git --yes
+      - name: patch
+        run: |
+          git config --global user.email "ci@scalecube.io"
+          git config --global user.name "scalecube ci"
+          git checkout develop
+          yarn lerna version patch --no-push --force-publish  --yes
+          #git push -u origin master
+          remote_repo="https://idanilt:${{secrets.GITHUB_TOKEN}}@github.com/idanilt/lerna-publish-test.git"
+          git push "${remote_repo}" HEAD:develop
