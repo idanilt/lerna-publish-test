@@ -64,7 +64,7 @@ jobs:
         node-version: [10.x]
     name: release
     needs: details
-    if: steps.info.outputs.base = 'master' && steps.info.outputs.ref = 'develop' && steps.info.outputs.is_admin = 'true'
+    if: needs.details.outputs.base = 'master' && needs.details.outputs.ref = 'develop' && needs.details.outputs.is_admin = 'true'
     steps:
       - name: NPM TOKEN
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
