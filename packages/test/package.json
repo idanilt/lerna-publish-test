@@ -1,6 +1,6 @@
 {
-  "name": "test",
-  "version": "0.0.12",
+  "name": "lerna-test-pulish-1",
+  "version": "0.0.14",
   "description": "> TODO: description",
   "author": "idanilt <idan@ilt.co.il>",
   "homepage": "https://github.com/idanilt/lerna-publish-test#readme",
@@ -25,5 +25,6 @@
   },
   "bugs": {
     "url": "https://github.com/idanilt/lerna-publish-test/issues"
-  }
+  },
+  "gitHead": "032018e37562dbcb5391140ec9b03bd31303d933"
 }
