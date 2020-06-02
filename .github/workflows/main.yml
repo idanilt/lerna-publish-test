@@ -29,8 +29,10 @@ jobs:
           body=$(echo $issue | jq -r ".body")
           commenter=$(jq -r ".comment.user.login" "${GITHUB_EVENT_PATH}")
 
-
-          user=$(curl -u scalecube-js:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/scalecube/scalecube-js/collaborators/$commenter/permission)
+          repo=$(jq -r ".repository.full_name" "${GITHUB_EVENT_PATH}")
+          project=$(jq -r ".repository.name" "${GITHUB_EVENT_PATH}")
+          
+          user=$(curl -u $project:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/$repo/collaborators/$commenter/permission)
 
           if [ "$(echo $user | jq -r ".permission")" = "admin" ]; then
             is_admin=true
@@ -48,8 +50,8 @@ jobs:
           author=$(jq -r ".issue.user.login" "${GITHUB_EVENT_PATH}")
           org=$(jq -r ".repository.owner.login" "${GITHUB_EVENT_PATH}")
           pr_number=$(jq -r ".issue.number" "${GITHUB_EVENT_PATH}")
-          project=$(jq -r ".repository.name" "${GITHUB_EVENT_PATH}")
-          repo=$(jq -r ".repository.full_name" "${GITHUB_EVENT_PATH}")
+        
+          
       - name: echo output
         run: |
           echo ${{ steps.info.outputs.base }}
