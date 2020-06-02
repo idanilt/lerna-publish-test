@@ -1,6 +1,6 @@
 {
   "name": "lerna-publish-test",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "main": "index.js",
   "repository": "git@github.com:idanilt/lerna-publish-test.git",
   "author": "idanilt <idan@ilt.co.il>",
