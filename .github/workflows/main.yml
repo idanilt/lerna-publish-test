@@ -76,6 +76,7 @@ jobs:
           ref: 'develop'
       - name: update version
         run: |
+          yarn global add lerna
           yarn lerna version ${{ steps.info.outputs.title }} --no-push --force-publish  --yes
           git push -u origin master
       - name: merge
