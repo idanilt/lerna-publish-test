@@ -11,6 +11,12 @@ jobs:
     name: details
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/release')
     # develop to master
+    outputs:
+      base: ${{ steps.info.outputs.base }}
+      ref: ${{ steps.info.outputs.ref }}
+      is_admin: ${{ steps.info.outputs.is_admin }}
+      title: ${{ steps.info.outputs.title }}
+      body: ${{ steps.info.outputs.body }}
     steps:
       - name: Get info
         id: info
@@ -80,9 +86,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: v${{steps.info.outputs.title}}
-          release_name: v${{steps.info.outputs.title}}
-          body: ${{ steps.info.outputs.body }}
+          tag_name: v${{needs.details.outputs.title}}
+          release_name: v${{needs.details.outputs.title}}
+          body: ${{ needs.details.outputs.body }}
           draft: false
           prerelease: false
       - name: Publish
