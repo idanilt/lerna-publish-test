@@ -1,6 +1,6 @@
 {
   "name": "test",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "> TODO: description",
   "author": "idanilt <idan@ilt.co.il>",
   "homepage": "https://github.com/idanilt/lerna-publish-test#readme",
@@ -26,5 +26,5 @@
   "bugs": {
     "url": "https://github.com/idanilt/lerna-publish-test/issues"
   },
-  "gitHead": "1aa9c3c6a84fd54fe9761bd760d4f5955611f4bc"
+  "gitHead": "fba3c1f95a8a5bd03dbbab8dbed54ccd01923846"
 }
