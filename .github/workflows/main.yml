@@ -1,0 +1,91 @@
+name: release
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  details:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
+    name: details
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/release')
+    # develop to master
+    steps:
+      - name: Get info
+        id: info
+        run: |
+          issue_url=$(jq -r ".issue.pull_request.url" "${GITHUB_EVENT_PATH}")
+          issue=$(curl "$issue_url")
+          base=$(echo $issue | jq -r ".base.ref")
+          ref=$(echo $issue | jq -r ".head.ref")
+          title=$(echo $issue | jq -r ".title")
+          body=$(echo $issue | jq -r ".body")
+          commenter=$(jq -r ".comment.user.login" "${GITHUB_EVENT_PATH}")
+
+
+          user=$(curl -u scalecube-js:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/scalecube/scalecube-js/collaborators/$commenter/permission)
+
+          if [ "$(echo $user | jq -r ".permission")" = "admin" ]; then
+            is_admin=true
+          else
+            is_admin=false
+          fi
+
+          echo "##[set-output name=base;]$(echo ${base})"
+          echo "##[set-output name=ref;]$(echo ${ref})"
+          echo "##[set-output name=is_admin;]$(echo ${is_admin})"
+          echo "##[set-output name=user;]$(echo ${commenter})"
+          echo "##[set-output name=title;]$(echo ${title})"
+          echo "##[set-output name=body;]$(echo ${body})"
+
+          author=$(jq -r ".issue.user.login" "${GITHUB_EVENT_PATH}")
+          org=$(jq -r ".repository.owner.login" "${GITHUB_EVENT_PATH}")
+          pr_number=$(jq -r ".issue.number" "${GITHUB_EVENT_PATH}")
+          project=$(jq -r ".repository.name" "${GITHUB_EVENT_PATH}")
+          repo=$(jq -r ".repository.full_name" "${GITHUB_EVENT_PATH}")
+      - name: echo output
+        run: |
+          echo ${{ steps.info.outputs.base }}
+          echo ${{ steps.info.outputs.ref }}
+          echo ${{ steps.info.outputs.is_admin }}
+      - name: Merge PR
+        run: cat "${GITHUB_EVENT_PATH}"
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
+    name: release
+    needs: details
+    if: steps.info.outputs.base = 'master' && steps.info.outputs.ref = 'develop' && steps.info.outputs.is_admin = 'true'
+    steps:
+      - name: NPM TOKEN
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: 'develop'
+      - name: update version
+        run: |
+          lerna version ${{ steps.info.outputs.title }} --no-push --force-publish  --yes
+          git push -u origin master
+      - name: merge
+        run: git checkout master && git fetch && git merge develop && git push
+      - name: install
+        run: yarn
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: v${{steps.info.outputs.title}}
+          release_name: v${{steps.info.outputs.title}}
+          body: ${{ steps.info.outputs.body }}
+          draft: false
+          prerelease: false
+      - name: Publish
+        run: |
+          git fetch
+          yarn lerna publish from-git --yes
