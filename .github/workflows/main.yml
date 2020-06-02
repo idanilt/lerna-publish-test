@@ -78,6 +78,8 @@ jobs:
         run: yarn
       - name: update version
         run: |
+          git config --global user.email "ci@scalecube.io"
+          git config --global user.name "scalecube ci"
           yarn lerna version ${{ needs.details.outputs.title }} --no-push --force-publish  --yes
           git push -u origin master
       - name: merge
