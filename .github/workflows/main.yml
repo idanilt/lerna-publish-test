@@ -110,7 +110,8 @@ jobs:
           echo $sha
           retry curl -u $project:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/idanilt/lerna-publish-test/pulls/${{ needs.details.outputs.pr }}/merge \
             --request PUT \
-            --data '{ "sha": "'"$sha"'", "merge_method": "merge", "commit_message": "", "commit_title": "Release v${{ needs.details.outputs.title }}" }'
+            --data '{ "sha": "'"$sha"'", "merge_method": "merge", "commit_message": "", "commit_title": "Release v${{ needs.details.outputs.title }}" }' \
+             | grep -q "Pull Request successfully merged"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
