@@ -73,6 +73,15 @@ jobs:
     steps:
       - name: NPM TOKEN
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - name: checkout1
+        uses: actions/checkout@v2
+        with:
+          ref: 'master'
+      - name: tt
+        run: |
+          npm whoami
+          git fetch
+          yarn lerna from-git --yes
       - name: checkout
         uses: actions/checkout@v2
         with:
