@@ -81,6 +81,7 @@ jobs:
         run: |
           npm whoami
           git fetch
+          yarn install
           yarn lerna from-git --yes
       - name: checkout
         uses: actions/checkout@v2
