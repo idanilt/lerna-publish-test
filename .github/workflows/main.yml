@@ -82,7 +82,7 @@ jobs:
           npm whoami
           git fetch
           yarn install
-          yarn lerna from-git --yes
+          yarn lerna publish from-git --yes
       - name: checkout
         uses: actions/checkout@v2
         with:
