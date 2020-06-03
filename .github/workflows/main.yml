@@ -89,9 +89,26 @@ jobs:
           git push "${remote_repo}" HEAD:develop
       - name: merge
         run: |
+          function retry {
+            local n=1
+            local max=5
+            local delay=5
+            while true; do
+              CMD="$@" && "$@" && break || {
+                if [[ $n -lt $max ]]; then
+                  ((n++))
+                  echo "Command \"$CMD\" failed. Attempt $n/$max:"
+                  sleep $delay;
+                else
+                  echo "The command \"$CMD\" has failed after $n attempts."
+                  exit 1
+                fi
+              }
+            done
+          }
           sha=$(git rev-parse HEAD) 
           echo $sha
-          curl -u $project:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/idanilt/lerna-publish-test/pulls/${{ needs.details.outputs.pr }}/merge \
+          retry curl -u $project:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/idanilt/lerna-publish-test/pulls/${{ needs.details.outputs.pr }}/merge \
             --request PUT \
             --data '{ "sha": "'"$sha"'", "merge_method": "merge", "commit_message": "", "commit_title": "Release v${{ needs.details.outputs.title }}" }'
       - name: Create Release
