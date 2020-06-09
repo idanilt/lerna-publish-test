@@ -59,7 +59,8 @@ jobs:
         run: |
           echo ${{ steps.info.outputs.base }}
           echo ${{ steps.info.outputs.ref }}
-          echo ${{ steps.info.outputs.is_admin }}
+          echo ${{ steps.info.outputs.body }}
+          exit 1
       - name: Merge PR
         run: cat "${GITHUB_EVENT_PATH}"
   release:
