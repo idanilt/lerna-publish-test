@@ -28,6 +28,8 @@ jobs:
           ref=$(echo $issue | jq -r ".head.ref")
           title=$(echo $issue | jq -r ".title")
           body=$(echo $issue | jq -r ".body")
+          echo "####################################"
+          echo "$body"
           commenter=$(jq -r ".comment.user.login" "${GITHUB_EVENT_PATH}")
 
           repo=$(jq -r ".repository.full_name" "${GITHUB_EVENT_PATH}")
