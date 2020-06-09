@@ -1,3 +1,3 @@
 # lerna-publish-test
 
-develop 3
+develop 0.2.1
