@@ -28,8 +28,9 @@ jobs:
           ref=$(echo $issue | jq -r ".head.ref")
           title=$(echo $issue | jq -r ".title")
           body=$(echo $issue | jq -r ".body")
-          echo "####################################"
-          echo "$body"
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
           commenter=$(jq -r ".comment.user.login" "${GITHUB_EVENT_PATH}")
 
           repo=$(jq -r ".repository.full_name" "${GITHUB_EVENT_PATH}")
@@ -62,7 +63,6 @@ jobs:
           echo ${{ steps.info.outputs.base }}
           echo ${{ steps.info.outputs.ref }}
           echo ${{ steps.info.outputs.body }}
-          exit 1
       - name: Merge PR
         run: cat "${GITHUB_EVENT_PATH}"
   release:
