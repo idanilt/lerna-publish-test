@@ -130,8 +130,7 @@ jobs:
         with:
           tag_name: v${{needs.details.outputs.title}}
           release_name: v${{needs.details.outputs.title}}
-          body: |
-            ${{ needs.details.outputs.body }}
+          body: "${{ needs.details.outputs.body }}"
           draft: false
           prerelease: false
       - name: Publish
