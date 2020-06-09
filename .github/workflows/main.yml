@@ -62,7 +62,7 @@ jobs:
         run: |
           echo ${{ steps.info.outputs.base }}
           echo ${{ steps.info.outputs.ref }}
-          echo ${{ steps.info.outputs.body }}
+          echo "${{ steps.info.outputs.body }}"
       - name: Merge PR
         run: cat "${GITHUB_EVENT_PATH}"
   release:
